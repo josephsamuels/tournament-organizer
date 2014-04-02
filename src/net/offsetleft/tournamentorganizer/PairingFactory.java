@@ -10,7 +10,7 @@ public final class PairingFactory {
     
     private PairingFactory() { }
     
-    public static <E extends AbstractPlayer> ArrayList<EventMatch> generateMatches(
+    public static <E extends AbstractPlayer> EventRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers) {
@@ -18,7 +18,7 @@ public final class PairingFactory {
         return generateMatches(players, minPlayers, maxPlayers, RematchesAllowed.YES);
     }
     
-    public static <E extends AbstractPlayer> ArrayList<EventMatch> generateMatches(
+    public static <E extends AbstractPlayer> EventRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers, 
@@ -51,7 +51,7 @@ public final class PairingFactory {
             root.cleanupNodes();
         }
 
-        public ArrayList<EventMatch> getPairings() {
+        public EventRound getPairings() {
             ArrayList<EventMatch> pairings = new ArrayList<>();
             PairingNode node = root;
 
@@ -65,7 +65,9 @@ public final class PairingFactory {
                 }
             }
 
-            return pairings;
+            EventRound round = new EventRound(pairings);
+            
+            return round;
         }
         
         private class PairingNode {

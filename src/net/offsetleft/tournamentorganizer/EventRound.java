@@ -9,6 +9,14 @@ public final class EventRound {
         this.matches = matches;
     }
     
+    public final void addMatch(EventMatch match) {
+        this.matches.add(match);
+    }
+    
+    public final ArrayList<EventMatch> getMatches() {
+        return this.matches;
+    }
+    
     public final void deleteRound() {
         for(EventMatch match : matches) {
             match.deleteMatch();

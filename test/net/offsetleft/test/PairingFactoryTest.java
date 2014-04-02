@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.offsetleft.tournamentorganizer.PairingFactory;
 import net.offsetleft.tournamentorganizer.EventMatch;
 import net.offsetleft.tournamentorganizer.AbstractPlayer;
+import net.offsetleft.tournamentorganizer.EventRound;
 
 /**
  *
@@ -41,9 +42,9 @@ public class PairingFactoryTest {
         list.add(p8);
         
         System.out.println("Round 1");
-        ArrayList<EventMatch> matches = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
-        for(int i = 0; i < matches.size(); i++) {
-            EventMatch m = matches.get(i);
+        EventRound round1 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        for(int i = 0; i < round1.getMatches().size(); i++) {
+            EventMatch m = round1.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractPlayer> players = m.getParticipants();
@@ -56,9 +57,9 @@ public class PairingFactoryTest {
         }
         
         System.out.println("Round 2");
-        ArrayList<EventMatch> matches2 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
-        for(int i = 0; i < matches2.size(); i++) {
-            EventMatch m = matches2.get(i);
+        EventRound round2 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        for(int i = 0; i < round2.getMatches().size(); i++) {
+            EventMatch m = round2.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractPlayer> players = m.getParticipants();
@@ -71,9 +72,9 @@ public class PairingFactoryTest {
         }
         
         System.out.println("Round 3");
-        ArrayList<EventMatch> matches3 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
-        for(int i = 0; i < matches3.size(); i++) {
-            EventMatch m = matches3.get(i);
+        EventRound round3 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        for(int i = 0; i < round3.getMatches().size(); i++) {
+            EventMatch m = round3.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractPlayer> players = m.getParticipants();
