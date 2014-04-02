@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public final class TournamentEvent<E extends AbstractPlayer> {
     private final ArrayList<EventRound> rounds = new ArrayList<>();
-    
+    private final ArrayList<E> participants = new ArrayList<>();
+    private final ArrayList<E> activePlayers = new ArrayList<>();
     
 }
