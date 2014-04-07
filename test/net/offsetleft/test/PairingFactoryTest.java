@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package net.offsetleft.test;
 
 import java.util.ArrayList;
@@ -11,6 +5,7 @@ import net.offsetleft.tournamentorganizer.PairingFactory;
 import net.offsetleft.tournamentorganizer.EventMatch;
 import net.offsetleft.tournamentorganizer.AbstractPlayer;
 import net.offsetleft.tournamentorganizer.EventRound;
+import net.offsetleft.tournamentorganizer.TournamentEvent;
 
 /**
  *
@@ -30,6 +25,17 @@ public class PairingFactoryTest {
         ConcretePlayer p6 = new ConcretePlayer("Bill", "Wallace");
         ConcretePlayer p7 = new ConcretePlayer("John", "Callan");
         ConcretePlayer p8 = new ConcretePlayer("Joe", "Samuels");
+        
+        TournamentEvent te = new TournamentEvent();
+        
+        te.addPlayer(p1);
+        te.addPlayer(p2);
+        te.addPlayer(p3);
+        te.addPlayer(p4);
+        te.addPlayer(p5);
+        te.addPlayer(p6);
+        te.addPlayer(p7);
+        te.addPlayer(p8);
         
         ArrayList<ConcretePlayer> list = new ArrayList<>();
         list.add(p1);
@@ -77,7 +83,7 @@ public class PairingFactoryTest {
             EventMatch m = round3.getMatches().get(i);
             System.out.println("Match " + i);
             
-            ArrayList<AbstractPlayer> players = m.getParticipants();
+            ArrayList<AbstractPlayer> players = m.getParticipants();            
             for(AbstractPlayer player : players) {
                 ConcretePlayer p = (ConcretePlayer)player;
                 System.out.println(p);
