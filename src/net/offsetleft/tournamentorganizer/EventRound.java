@@ -13,13 +13,17 @@ public final class EventRound {
         this.matches.add(match);
     }
     
+    public final ArrayList<AbstractParticipant> deleteMatch(EventMatch match) {
+        return match.cleanParticipants();
+    }
+    
     public final ArrayList<EventMatch> getMatches() {
         return this.matches;
     }
     
-    public final void deleteRound() {
+    public final void cleanMatches() {
         for(EventMatch match : matches) {
-            match.deleteMatch();
+            match.cleanParticipants();
         }
     }
 }

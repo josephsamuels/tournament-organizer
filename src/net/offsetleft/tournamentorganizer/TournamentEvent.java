@@ -2,66 +2,85 @@ package net.offsetleft.tournamentorganizer;
 
 import java.util.ArrayList;
 
-public final class TournamentEvent<E extends AbstractPlayer> {
-    
-    private final ArrayList<E> allPlayers = new ArrayList<>();
-    private final ArrayList<E> activePlayers = new ArrayList<>();
-    private final ArrayList<E> droppedPlayers = new ArrayList<>();
-    private final ArrayList<EventRound> rounds = new ArrayList<>();
-    
-    private final int MIN_PLAYERS, MAX_PLAYERS;
-    
-    public TournamentEvent(int minPlayers, int maxPlayers) {
-        this.MIN_PLAYERS = minPlayers;
-        this.MAX_PLAYERS = maxPlayers;
+public final class TournamentEvent<E extends AbstractParticipant> {
+    public enum Style {
+        SWISS, SINGLE, DOUBLE;
     }
     
-    public final void addPlayer(E player) {
-        if(!this.allPlayers.contains(player)) {
-            this.allPlayers.add(player);
-            this.activePlayers.add(player);
+    private final ArrayList<E> allParticipants = new ArrayList<>();
+    private final ArrayList<E> activeParticipants = new ArrayList<>();
+    private final ArrayList<E> droppedParticipants = new ArrayList<>();
+    private final ArrayList<EventRound> rounds = new ArrayList<>();
+    
+    private final int MIN_PAIRING, MAX_PAIRING;
+    
+    private final Style STYLE;
+    
+    public TournamentEvent(int minPairingCount, int maxPairingCount, Style style) {
+        this.MIN_PAIRING = minPairingCount;
+        this.MAX_PAIRING = maxPairingCount;
+        this.STYLE = style;
+    }
+    
+    public final void addParticipant(E participant) {
+        if(!this.allParticipants.contains(participant)) {
+            this.allParticipants.add(participant);
+            this.activeParticipants.add(participant);
         }
     }
     
-    public final void dropPlayer(E player) {
-        this.activePlayers.remove(player);
-        this.droppedPlayers.add(player);
+    public final void dropParticipant(E participant) {
+        this.activeParticipants.remove(participant);
+        this.droppedParticipants.add(participant);
     }
     
-    public final void reinstatePlayer(E player) {
-        this.droppedPlayers.remove(player);
-        this.activePlayers.add(player);
+    public final void reinstateParticipant(E particpant) {
+        this.droppedParticipants.remove(particpant);
+        this.activeParticipants.add(particpant);
     }
     
-    public final void deletePlayer(E player) throws Exception {
+    public final void deleteParticipant(E player) throws Exception {
         if(rounds.isEmpty()) {
-            this.activePlayers.remove(player);
-            this.allPlayers.remove(player);
+            this.activeParticipants.remove(player);
+            this.allParticipants.remove(player);
         } else {
             throw new Exception("Cannot remove player after event has started.");
         }
     }
     
-    public final ArrayList<E> getAllPlayersList() {
-        return this.allPlayers;
+    public final ArrayList<E> getAllParticipantsList() {
+        return this.allParticipants;
     }
     
-    public final ArrayList<E> getActivePlayersList() {
-        return this.activePlayers;
+    public final ArrayList<E> getActiveParticipantList() {
+        return this.activeParticipants;
     }
     
-    public final ArrayList<E> getDroppedPlayersList() {
-        return this.droppedPlayers;
+    public final ArrayList<E> getDroppedParticipantList() {
+        return this.droppedParticipants;
     }
     
     public final void createRound() {
-        EventRound round = PairingFactory.generateMatches(activePlayers, MIN_PLAYERS, MAX_PLAYERS);
+        
+        
+        EventRound round = 
+                PairingFactory.generateMatches(activeParticipants, 
+                                                MIN_PAIRING, 
+                                                MAX_PAIRING);
         
         this.rounds.add(round);
+    }
+    
+    public final void deleteRound(int index) {
+        EventRound r = rounds.remove(index);
+        r.cleanMatches();
     }
     
     public final ArrayList<EventRound> getRounds() {
         return this.rounds;
     }
     
+    public final Style getEventStyle() {
+        return this.STYLE;
+    }
 }
