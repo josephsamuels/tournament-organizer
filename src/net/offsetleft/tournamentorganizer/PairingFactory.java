@@ -1,16 +1,15 @@
 package net.offsetleft.tournamentorganizer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public final class PairingFactory {
-    public enum RematchesAllowed {
+final class PairingFactory {
+    enum RematchesAllowed {
         YES, NO;
     }
     
     private PairingFactory() { }
     
-    public static <E extends AbstractParticipant> EventRound generateMatches(
+    static <E extends AbstractParticipant> EventRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers) {
@@ -18,37 +17,14 @@ public final class PairingFactory {
         return generateMatches(players, minPlayers, maxPlayers, RematchesAllowed.YES);
     }
     
-    public static <E extends AbstractParticipant> EventRound generateMatches(
+    static <E extends AbstractParticipant> EventRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers, 
             RematchesAllowed rematches) {
         
-        Collections.sort(players);
-        
         PairingList<E> list = 
                 new PairingList(players, minPlayers, maxPlayers, rematches);
-        
-        return list.getPairings();
-    }
-    
-    public static <E extends AbstractParticipant> EventRound generatePlayoffMatches(
-            ArrayList<E> players,
-            int minPlayers,
-            int maxPlayers) {
-        
-        Collections.sort(players);
-        
-        ArrayList<E> playoffSeeding = new ArrayList<>();
-        int playerCount = players.size();
-        
-        for(int i = 0; i < playerCount / 2; i++) {
-            playoffSeeding.add(players.get(i));
-            playoffSeeding.add(players.get((playerCount - 1) - i));
-        }
-        
-        PairingList<E> list = 
-                new PairingList(playoffSeeding, minPlayers, maxPlayers, RematchesAllowed.YES);
         
         return list.getPairings();
     }
@@ -57,7 +33,7 @@ public final class PairingFactory {
         private final PairingNode root;
         private final RematchesAllowed rematches;
         
-        public PairingList(
+        private PairingList(
                 ArrayList<AbstractParticipant> players, 
                 int minNodeSize, 
                 int maxNodeSize, 
@@ -73,7 +49,7 @@ public final class PairingFactory {
             root.cleanupNodes();
         }
         
-        public EventRound getPairings() {
+        private EventRound getPairings() {
             ArrayList<EventMatch> pairings = new ArrayList<>();
             PairingNode node = root;
 
@@ -98,7 +74,7 @@ public final class PairingFactory {
             private final int minNodeSize, maxNodeSize;
             private PairingNode next;
 
-            public PairingNode(PairingNode previous,
+            private PairingNode(PairingNode previous,
                     int minNodeSize,
                     int maxNodeSize) {
                 players = new ArrayList<>();
@@ -108,7 +84,7 @@ public final class PairingFactory {
                 this.maxNodeSize = maxNodeSize;
             }
 
-            public void addPlayer(AbstractParticipant p) {
+            private void addPlayer(AbstractParticipant p) {
                 if (getSize() < maxNodeSize && rematches == RematchesAllowed.NO) {
                     for (AbstractParticipant opponent : players) {
                         if (p.hasPlayed(opponent)) {
@@ -135,15 +111,15 @@ public final class PairingFactory {
                 }
             }
             
-            public boolean hasNext() {
+            private boolean hasNext() {
                 return next != null;
             }
             
-            public PairingNode getNext() {
+            private PairingNode getNext() {
                 return next;
             }
             
-            public EventMatch getMatch() {
+            private EventMatch getMatch() {
                 EventMatch match = new EventMatch();
                 
                 for(AbstractParticipant p : players) {
@@ -153,15 +129,15 @@ public final class PairingFactory {
                 return match;
             }
             
-            public PairingNode getPrevious() {
+            private PairingNode getPrevious() {
                 return previous;
             }
             
-            public int getSize() {
+            private int getSize() {
                 return players.size();
             }
             
-            public void cleanupNodes() {
+            private void cleanupNodes() {
                 if (next != null) {
                     next.cleanupNodes();
                 }
@@ -194,11 +170,11 @@ public final class PairingFactory {
                 }
             }
 
-            public AbstractParticipant surrenderLast() {
+            private AbstractParticipant surrenderLast() {
                 return players.remove(players.size() - 1);
             }
 
-            public AbstractParticipant surrenderPlayer(AbstractParticipant p) {
+            private AbstractParticipant surrenderPlayer(AbstractParticipant p) {
                 return players.remove(players.indexOf(p));
             }
         }

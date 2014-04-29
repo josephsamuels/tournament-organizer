@@ -75,11 +75,13 @@ public final class EventMatch {
      * @return 
      */
     public final int getResult(AbstractParticipant player) {
-        if(results.contains(player))
-            return results.indexOf(player);
-        else
-            throw new NoSuchElementException(
-                    "Player did not participate in this match");
+        if(results.size() > 0)
+            if(results.contains(player))
+                return results.indexOf(player);
+            else
+                throw new NoSuchElementException(
+                        "Player did not participate in this match");
+        return -1;
     }
     
     /**

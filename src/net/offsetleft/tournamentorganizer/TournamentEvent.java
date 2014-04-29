@@ -1,6 +1,7 @@
 package net.offsetleft.tournamentorganizer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class TournamentEvent<E extends AbstractParticipant> {
     
@@ -14,9 +15,23 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     
     private final TournamentStyle STYLE;
     
-    public TournamentEvent(int minPairingCount, int maxPairingCount, TournamentStyle style) {
+    private final TournamentFormat FORMAT;
+    
+    public TournamentEvent(TournamentStyle style) {
+        this.MIN_PAIRING = 1;
+        this.MAX_PAIRING = 2;
+        this.FORMAT = TournamentFormat.HEADSUP;
+        this.STYLE = style;
+    }
+    
+    public TournamentEvent(
+            int minPairingCount, 
+            int maxPairingCount, 
+            TournamentFormat format,
+            TournamentStyle style) {
         this.MIN_PAIRING = minPairingCount;
         this.MAX_PAIRING = maxPairingCount;
+        this.FORMAT = format;
         this.STYLE = style;
     }
     
@@ -43,7 +58,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             this.allParticipants.remove(player);
         } else {
             throw new IllegalStateException(
-                    "Cannot remove player after event has started.");
+                    "Cannot delete player after event has started.");
         }
     }
     
@@ -64,10 +79,37 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             dropEliminatedPlayers();
         }
         
+        Collections.sort(activeParticipants);
+        
+        PairingFactory.RematchesAllowed rematches = null;
+        
+        if(FORMAT == TournamentFormat.HEADSUP) {
+            rematches = PairingFactory.RematchesAllowed.NO;
+        } else if(FORMAT == TournamentFormat.MULTIPLAYER) {
+            rematches = PairingFactory.RematchesAllowed.YES;
+        }
+        
         EventRound round = 
-                PairingFactory.generateMatches(activeParticipants, 
-                                                MIN_PAIRING, 
-                                                MAX_PAIRING);
+                    PairingFactory.generateMatches(activeParticipants, 
+                                                    MIN_PAIRING, 
+                                                    MAX_PAIRING, rematches);
+        
+        this.rounds.add(round);
+    }
+    
+    public final void createPlayoffRound() {
+        Collections.sort(activeParticipants);
+        
+        ArrayList<E> playoffSeeding = new ArrayList<>();
+        int playerCount = activeParticipants.size();
+        
+        for(int i = 0; i < playerCount / 2; i++) {
+            playoffSeeding.add(activeParticipants.get(i));
+            playoffSeeding.add(activeParticipants.get((playerCount - 1) - i));
+        }
+        
+        EventRound round = 
+                PairingFactory.generateMatches(playoffSeeding, 1, 2);
         
         this.rounds.add(round);
     }
@@ -97,6 +139,10 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         for(E participant : toDrop) {
             this.dropParticipant(participant);
         }
+    }
+    
+    public EventRound getRound(int index) {
+        return rounds.get(index);
     }
     
     public final void deleteRound(int index) {
