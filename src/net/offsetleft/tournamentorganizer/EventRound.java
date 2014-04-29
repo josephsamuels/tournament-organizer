@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * property. Includes a number of helper methods to help with the creation, 
  * modification and deletion of a round of an event.
  * 
- * @author Joseph Samuels
+ * @author Joseph W. Samuels
  */
 public final class EventRound {
     /**

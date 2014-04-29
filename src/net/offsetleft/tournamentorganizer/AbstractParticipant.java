@@ -3,11 +3,11 @@ package net.offsetleft.tournamentorganizer;
 import java.util.ArrayList;
 
 /**
- * Abstract class that contains three properties. Includes a number of standard
- * methods that are helpful to managing a participant in an event. Must 
+ * Abstract composite class that contains three properties. Includes a number 
+ * of standard methods that help to manage a participant in an event. Must 
  * implement the compareTo method in order for this package to work properly.
  * 
- * @author josephsamuels
+ * @author Joseph W. Samuels
  */
 public abstract class AbstractParticipant implements Comparable<AbstractParticipant> {
     /**
@@ -16,7 +16,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     protected final ArrayList<EventMatch> matches = new ArrayList<>();
     
     /**
-     * String that contain the player's first and last names.
+     * Strings that contain the player's first and last names.
      */
     protected final String surname, givenName;
     
@@ -24,8 +24,8 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      * Default constructor that must be called using super from the implementing
      * class.
      * 
-     * @param   surname     the participant's family name.
-     * @param   givenName   the participant's given name.
+     * @param   surname     the participant's family name
+     * @param   givenName   the participant's given name
      */
     public AbstractParticipant(String surname, String givenName) {
         this.surname = surname;
@@ -33,30 +33,59 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     }
     
     /**
+     * Getter for the givenName property.
      * 
-     * 
-     * @return 
+     * @return              the participant's given name
      */
     public final String getGivenName() {
         return this.givenName;
     }
     
+    /**
+     * Getter for the surname property.
+     * 
+     * @return              the participant's family name
+     */
     public final String getSurname() {
         return this.surname;
     }
     
+    /**
+     * Returns the list of matches {@code this} has participated in.
+     * 
+     * @return              the list of matches for this participant
+     */
     public final ArrayList<EventMatch> getMatches() {
         return this.matches;
     }
     
-    public final void addMatch(EventMatch e) {
-        this.matches.add(e);
+    /**
+     * Adds a match to the list of matches {@code this} was a participant in.
+     * 
+     * @param match         the match to add to the list
+     */
+    public final void addMatch(EventMatch match) {
+        this.matches.add(match);
     }
     
-    public final boolean removeMatch(EventMatch e) {
-        return this.matches.remove(e);
+    /**
+     * Removes a match from the list of matches {@code this} was a 
+     * participant in.
+     * 
+     * @param match         the match to remove from the list
+     * @return              a boolean representing the result of 
+     *                      {@code ArrayList}'s remove action
+     */
+    public final boolean removeMatch(EventMatch match) {
+        return this.matches.remove(match);
     }
     
+    /**
+     * Returns the loss count for {@code this} participant. A loss is 
+     * considered to be any match where the participant did not place first.
+     * 
+     * @return              an int representing the total number of losses
+     */
     public final int getLossCount() {
         int lossCount = 0;
         
@@ -69,6 +98,12 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
         return lossCount;
     }
     
+    /**
+     * Returns if {@code this} participant has had a bye or not. A bye is 
+     * considered to be any match where {@code this} was the only participant.
+     * 
+     * @return              a boolean representing if {@code this} has had a bye
+     */
     public final boolean hasHadBye() {
         for(EventMatch match : this.matches) {
             if(match.getParticipants().size() == 1) {
@@ -79,6 +114,14 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
         return false;
     }
     
+    /**
+     * A test to see if {@code this} participant has played against 
+     * {@code player} in a previous round.
+     * 
+     * @param player        the participant we wish to check
+     * @return              a boolean representing if {@code this} has played
+     *                      {@code player}
+     */
     public final boolean hasPlayed(AbstractParticipant player) {
         for(EventMatch match : this.matches) {
             if(match.wasParticipant(player)) {
@@ -89,16 +132,33 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
         return false;
     }
     
-    public int alphaCompare(AbstractParticipant o) {
-        if(surname.compareTo(o.surname) != 0) {
-            return surname.compareTo(o.surname);
-        } else if(givenName.compareTo(o.givenName) != 0) {
-            return givenName.compareTo(o.givenName);
+    /**
+     * Useful for sorting participants alphabetically. First sorts by
+     * {@code surname}, then by {@code givenName}.
+     * 
+     * @param p             the participant we wish to compare against
+     * @return              the value 0 if {@code this} is equal to the provided
+     *                      string; a value less than 0 if {@code this} is less
+     *                      than the provided argument; a value greater than 0
+     *                      if {@code this} is greater than the provided 
+     *                      argument.
+     */
+    public int alphaCompare(AbstractParticipant p) {
+        if(surname.compareTo(p.surname) != 0) {
+            return surname.compareTo(p.surname);
+        } else if(givenName.compareTo(p.givenName) != 0) {
+            return givenName.compareTo(p.givenName);
         }
 
         return 0;
     }
     
+    /**
+     * Returns a String object in last name first, first name last format.
+     * 
+     * @return              a string representation of this object in last name
+     *                      first, first name last format.
+     */
     @Override
     public String toString() {
         return surname + ", " + surname;
