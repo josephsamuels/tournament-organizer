@@ -161,6 +161,6 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      */
     @Override
     public String toString() {
-        return surname + ", " + surname;
+        return surname + ", " + givenName;
     }
 }

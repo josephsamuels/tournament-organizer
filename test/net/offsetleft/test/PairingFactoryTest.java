@@ -6,6 +6,7 @@ import net.offsetleft.tournamentorganizer.EventMatch;
 import net.offsetleft.tournamentorganizer.AbstractParticipant;
 import net.offsetleft.tournamentorganizer.EventRound;
 import net.offsetleft.tournamentorganizer.TournamentEvent;
+import net.offsetleft.tournamentorganizer.TournamentStyle;
 
 /**
  *
@@ -26,7 +27,7 @@ public class PairingFactoryTest {
         ConcreteParticipant p7 = new ConcreteParticipant("Callan", "John");
         ConcreteParticipant p8 = new ConcreteParticipant("Samuels", "Joe");
         
-        TournamentEvent te = new TournamentEvent(1, 2, TournamentEvent.Style.SWISS);
+        TournamentEvent te = new TournamentEvent(1, 2, TournamentStyle.SWISS);
         
         te.addParticipant(p1);
         te.addParticipant(p2);
@@ -37,18 +38,9 @@ public class PairingFactoryTest {
         te.addParticipant(p7);
         te.addParticipant(p8);
         
-        ArrayList<ConcreteParticipant> list = new ArrayList<>();
-        list.add(p1);
-        list.add(p2);
-        list.add(p3);
-        list.add(p4);
-        list.add(p5);
-        list.add(p6);
-        list.add(p7);
-        list.add(p8);
-        
         System.out.println("Round 1");
-        EventRound round1 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        EventRound round1 = PairingFactory.generateMatches(
+                te.getActiveParticipantList(), 1, 2, PairingFactory.RematchesAllowed.NO);
         for(int i = 0; i < round1.getMatches().size(); i++) {
             EventMatch m = round1.getMatches().get(i);
             System.out.println("Match " + i);
@@ -63,7 +55,7 @@ public class PairingFactoryTest {
         }
         
         System.out.println("Round 2");
-        EventRound round2 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        EventRound round2 = PairingFactory.generateMatches(te.getActiveParticipantList(), 1, 2, PairingFactory.RematchesAllowed.NO);
         for(int i = 0; i < round2.getMatches().size(); i++) {
             EventMatch m = round2.getMatches().get(i);
             System.out.println("Match " + i);
@@ -78,9 +70,28 @@ public class PairingFactoryTest {
         }
         
         System.out.println("Round 3");
-        EventRound round3 = PairingFactory.generateMatches(list, 1, 2, PairingFactory.RematchesAllowed.NO);
+        EventRound round3 = PairingFactory.generateMatches(te.getActiveParticipantList(), 1, 2, PairingFactory.RematchesAllowed.NO);
         for(int i = 0; i < round3.getMatches().size(); i++) {
             EventMatch m = round3.getMatches().get(i);
+            System.out.println("Match " + i);
+            
+            ArrayList<AbstractParticipant> players = m.getParticipants();            
+            for(AbstractParticipant player : players) {
+                ConcreteParticipant p = (ConcreteParticipant)player;
+                System.out.println(p);
+            }
+            
+            System.out.println();
+        }
+        
+        te.cutToTop(4);
+        
+        System.out.println(te.getActiveParticipantList());
+        
+        System.out.println("Playoff Round");
+        EventRound playoffRound1 = PairingFactory.generatePlayoffMatches(te.getActiveParticipantList(), 1, 2);
+        for(int i = 0; i < playoffRound1.getMatches().size(); i++) {
+            EventMatch m = playoffRound1.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractParticipant> players = m.getParticipants();            

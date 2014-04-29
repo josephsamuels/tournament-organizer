@@ -32,6 +32,27 @@ public final class PairingFactory {
         return list.getPairings();
     }
     
+    public static <E extends AbstractParticipant> EventRound generatePlayoffMatches(
+            ArrayList<E> players,
+            int minPlayers,
+            int maxPlayers) {
+        
+        Collections.sort(players);
+        
+        ArrayList<E> playoffSeeding = new ArrayList<>();
+        int playerCount = players.size();
+        
+        for(int i = 0; i < playerCount / 2; i++) {
+            playoffSeeding.add(players.get(i));
+            playoffSeeding.add(players.get((playerCount - 1) - i));
+        }
+        
+        PairingList<E> list = 
+                new PairingList(playoffSeeding, minPlayers, maxPlayers, RematchesAllowed.YES);
+        
+        return list.getPairings();
+    }
+    
     private static class PairingList <E extends AbstractParticipant> {
         private final PairingNode root;
         private final RematchesAllowed rematches;
@@ -51,7 +72,7 @@ public final class PairingFactory {
 
             root.cleanupNodes();
         }
-
+        
         public EventRound getPairings() {
             ArrayList<EventMatch> pairings = new ArrayList<>();
             PairingNode node = root;

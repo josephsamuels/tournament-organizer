@@ -3,20 +3,18 @@ package net.offsetleft.tournamentorganizer;
 import java.util.ArrayList;
 
 public final class TournamentEvent<E extends AbstractParticipant> {
-    public enum Style {
-        SWISS, SINGLE, DOUBLE;
-    }
     
     private final ArrayList<E> allParticipants = new ArrayList<>();
     private final ArrayList<E> activeParticipants = new ArrayList<>();
     private final ArrayList<E> droppedParticipants = new ArrayList<>();
+    
     private final ArrayList<EventRound> rounds = new ArrayList<>();
     
     private final int MIN_PAIRING, MAX_PAIRING;
     
-    private final Style STYLE;
+    private final TournamentStyle STYLE;
     
-    public TournamentEvent(int minPairingCount, int maxPairingCount, Style style) {
+    public TournamentEvent(int minPairingCount, int maxPairingCount, TournamentStyle style) {
         this.MIN_PAIRING = minPairingCount;
         this.MAX_PAIRING = maxPairingCount;
         this.STYLE = style;
@@ -44,7 +42,8 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             this.activeParticipants.remove(player);
             this.allParticipants.remove(player);
         } else {
-            throw new Exception("Cannot remove player after event has started.");
+            throw new IllegalStateException(
+                    "Cannot remove player after event has started.");
         }
     }
     
@@ -61,7 +60,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     }
     
     public final void createRound() {
-        if(STYLE == Style.SINGLE || STYLE == Style.DOUBLE) {
+        if(STYLE == TournamentStyle.SINGLE || STYLE == TournamentStyle.DOUBLE) {
             dropEliminatedPlayers();
         }
         
@@ -73,12 +72,24 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         this.rounds.add(round);
     }
     
+    public final void cutToTop(int x) {
+        ArrayList<E> toDrop = new ArrayList<>();
+        
+        for(int i=x; i < activeParticipants.size(); i++) {
+            toDrop.add(activeParticipants.get(i));
+        }
+        
+        for(E participant : toDrop) {
+            this.dropParticipant(participant);
+        }
+    }
+    
     private void dropEliminatedPlayers() {
         ArrayList<E> toDrop = new ArrayList<>();
         
         for(E participant : activeParticipants) {
-            if((participant.getLossCount() > 0 && STYLE == Style.SINGLE)
-                  || (participant.getLossCount() > 1 && STYLE == Style.DOUBLE)) {
+            if((participant.getLossCount() > 0 && STYLE == TournamentStyle.SINGLE)
+                  || (participant.getLossCount() > 1 && STYLE == TournamentStyle.DOUBLE)) {
                 toDrop.add(participant);
             }
         }
@@ -99,7 +110,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         return this.rounds;
     }
     
-    public final Style getEventStyle() {
+    public final TournamentStyle getEventStyle() {
         return this.STYLE;
     }
 }
