@@ -61,7 +61,9 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     }
     
     public final void createRound() {
-        
+        if(STYLE == Style.SINGLE || STYLE == Style.DOUBLE) {
+            dropEliminatedPlayers();
+        }
         
         EventRound round = 
                 PairingFactory.generateMatches(activeParticipants, 
@@ -71,9 +73,26 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         this.rounds.add(round);
     }
     
+    private void dropEliminatedPlayers() {
+        ArrayList<E> toDrop = new ArrayList<>();
+        
+        for(E participant : activeParticipants) {
+            if((participant.getLossCount() > 0 && STYLE == Style.SINGLE)
+                  || (participant.getLossCount() > 1 && STYLE == Style.DOUBLE)) {
+                toDrop.add(participant);
+            }
+        }
+        
+        for(E participant : toDrop) {
+            this.dropParticipant(participant);
+        }
+    }
+    
     public final void deleteRound(int index) {
         EventRound r = rounds.remove(index);
-        r.cleanMatches();
+        for(EventMatch match : r.getMatches()) {
+            match.cleanParticipants();
+        }
     }
     
     public final ArrayList<EventRound> getRounds() {

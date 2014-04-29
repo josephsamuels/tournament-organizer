@@ -2,15 +2,41 @@ package net.offsetleft.tournamentorganizer;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract class that contains three properties. Includes a number of standard
+ * methods that are helpful to managing a participant in an event. Must 
+ * implement the compareTo method in order for this package to work properly.
+ * 
+ * @author josephsamuels
+ */
 public abstract class AbstractParticipant implements Comparable<AbstractParticipant> {
+    /**
+     * List used to contain the matches the player participated in.
+     */
     protected final ArrayList<EventMatch> matches = new ArrayList<>();
+    
+    /**
+     * String that contain the player's first and last names.
+     */
     protected final String surname, givenName;
     
+    /**
+     * Default constructor that must be called using super from the implementing
+     * class.
+     * 
+     * @param   surname     the participant's family name.
+     * @param   givenName   the participant's given name.
+     */
     public AbstractParticipant(String surname, String givenName) {
         this.surname = surname;
         this.givenName = givenName;
     }
     
+    /**
+     * 
+     * 
+     * @return 
+     */
     public final String getGivenName() {
         return this.givenName;
     }
@@ -29,6 +55,18 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     
     public final boolean removeMatch(EventMatch e) {
         return this.matches.remove(e);
+    }
+    
+    public final int getLossCount() {
+        int lossCount = 0;
+        
+        for(EventMatch match : matches) {
+            if(match.getResult(this) != 0) {
+                lossCount++;
+            }
+        }
+        
+        return lossCount;
     }
     
     public final boolean hasHadBye() {
@@ -63,6 +101,6 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     
     @Override
     public String toString() {
-        return givenName + " " + surname;
+        return surname + ", " + surname;
     }
 }
