@@ -1,9 +1,9 @@
 package net.offsetleft.test;
 
 import java.util.ArrayList;
-import net.offsetleft.tournamentorganizer.EventMatch;
 import net.offsetleft.tournamentorganizer.AbstractParticipant;
-import net.offsetleft.tournamentorganizer.EventRound;
+import net.offsetleft.tournamentorganizer.TournamentMatch;
+import net.offsetleft.tournamentorganizer.TournamentRound;
 import net.offsetleft.tournamentorganizer.TournamentEvent;
 import net.offsetleft.tournamentorganizer.TournamentStyle;
 
@@ -39,9 +39,9 @@ public class PairingFactoryTest {
         
         System.out.println("Round 1");
         te.createRound();
-        EventRound round1 = te.getRound(0);
+        TournamentRound round1 = te.getRound(0);
         for(int i = 0; i < round1.getMatches().size(); i++) {
-            EventMatch m = round1.getMatches().get(i);
+            TournamentMatch m = round1.getMatches().get(i);
             
             System.out.println("Match " + i);
             
@@ -57,9 +57,9 @@ public class PairingFactoryTest {
         
         System.out.println("Round 2");
         te.createRound();
-        EventRound round2 = te.getRound(1);
+        TournamentRound round2 = te.getRound(1);
         for(int i = 0; i < round2.getMatches().size(); i++) {
-            EventMatch m = round2.getMatches().get(i);
+            TournamentMatch m = round2.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractParticipant> players = m.getParticipants();
@@ -74,9 +74,9 @@ public class PairingFactoryTest {
         
         System.out.println("Round 3");
         te.createRound();
-        EventRound round3 = te.getRound(2);
+        TournamentRound round3 = te.getRound(2);
         for(int i = 0; i < round3.getMatches().size(); i++) {
-            EventMatch m = round3.getMatches().get(i);
+            TournamentMatch m = round3.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractParticipant> players = m.getParticipants();
@@ -91,11 +91,12 @@ public class PairingFactoryTest {
         }
         
         System.out.println("Playoff Round");
-        te.cutToTop(4);
+//        TournamentPlayoff playoff = te.createPlayoff(4);
+        
         te.createPlayoffRound();
-        EventRound playoffRound1 = te.getRound(3);
+        TournamentRound playoffRound1 = te.getRound(3);
         for(int i = 0; i < playoffRound1.getMatches().size(); i++) {
-            EventMatch m = playoffRound1.getMatches().get(i);
+            TournamentMatch m = playoffRound1.getMatches().get(i);
             System.out.println("Match " + i);
             
             ArrayList<AbstractParticipant> players = m.getParticipants();            

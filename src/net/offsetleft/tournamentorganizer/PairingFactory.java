@@ -9,7 +9,7 @@ final class PairingFactory {
     
     private PairingFactory() { }
     
-    static <E extends AbstractParticipant> EventRound generateMatches(
+    static <E extends AbstractParticipant> TournamentRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers) {
@@ -17,7 +17,7 @@ final class PairingFactory {
         return generateMatches(players, minPlayers, maxPlayers, RematchesAllowed.YES);
     }
     
-    static <E extends AbstractParticipant> EventRound generateMatches(
+    static <E extends AbstractParticipant> TournamentRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers, 
@@ -49,8 +49,8 @@ final class PairingFactory {
             root.cleanupNodes();
         }
         
-        private EventRound getPairings() {
-            ArrayList<EventMatch> pairings = new ArrayList<>();
+        private TournamentRound getPairings() {
+            ArrayList<TournamentMatch> pairings = new ArrayList<>();
             PairingNode node = root;
 
             if(node != null) {
@@ -63,7 +63,7 @@ final class PairingFactory {
                 }
             }
 
-            EventRound round = new EventRound(pairings);
+            TournamentRound round = new TournamentRound(pairings);
             
             return round;
         }
@@ -119,8 +119,8 @@ final class PairingFactory {
                 return next;
             }
             
-            private EventMatch getMatch() {
-                EventMatch match = new EventMatch();
+            private TournamentMatch getMatch() {
+                TournamentMatch match = new TournamentMatch();
                 
                 for(AbstractParticipant p : players) {
                     match.addParticipant(p);

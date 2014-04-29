@@ -9,19 +9,15 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     private final ArrayList<E> activeParticipants = new ArrayList<>();
     private final ArrayList<E> droppedParticipants = new ArrayList<>();
     
-    private final ArrayList<EventRound> rounds = new ArrayList<>();
+    private final ArrayList<TournamentRound> rounds = new ArrayList<>();
     
     private final int MIN_PAIRING, MAX_PAIRING;
     
     private final TournamentStyle STYLE;
-    
     private final TournamentFormat FORMAT;
     
     public TournamentEvent(TournamentStyle style) {
-        this.MIN_PAIRING = 1;
-        this.MAX_PAIRING = 2;
-        this.FORMAT = TournamentFormat.HEADSUP;
-        this.STYLE = style;
+        this(1, 2, TournamentFormat.HEADSUP, style);
     }
     
     public TournamentEvent(
@@ -35,10 +31,30 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         this.STYLE = style;
     }
     
+    /*
+     *  The following methods deal in participant relations.
+     */
+    
+    /**
+     * 
+     * 
+     * @param participant 
+     */
     public final void addParticipant(E participant) {
         if(!this.allParticipants.contains(participant)) {
             this.allParticipants.add(participant);
             this.activeParticipants.add(participant);
+        }
+    }
+    
+    public final void removeParticipant(E player) throws Exception {
+        if(rounds.isEmpty()) {
+            this.activeParticipants.remove(player);
+            this.allParticipants.remove(player);
+            this.droppedParticipants.remove(player);
+        } else {
+            throw new IllegalStateException(
+                    "Cannot remove player after event has started.");
         }
     }
     
@@ -50,16 +66,6 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     public final void reinstateParticipant(E particpant) {
         this.droppedParticipants.remove(particpant);
         this.activeParticipants.add(particpant);
-    }
-    
-    public final void deleteParticipant(E player) throws Exception {
-        if(rounds.isEmpty()) {
-            this.activeParticipants.remove(player);
-            this.allParticipants.remove(player);
-        } else {
-            throw new IllegalStateException(
-                    "Cannot delete player after event has started.");
-        }
     }
     
     public final ArrayList<E> getAllParticipantsList() {
@@ -89,12 +95,22 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             rematches = PairingFactory.RematchesAllowed.YES;
         }
         
-        EventRound round = 
+        TournamentRound round = 
                     PairingFactory.generateMatches(activeParticipants, 
                                                     MIN_PAIRING, 
                                                     MAX_PAIRING, rematches);
         
         this.rounds.add(round);
+    }
+    
+    public final void createPlayoff(int theCut) {
+        Collections.sort(activeParticipants);
+        
+        ArrayList<E> toPlayoff = new ArrayList<>();
+        
+        for(int i=0; i < theCut; i++) {
+            toPlayoff.add(activeParticipants.get(i));
+        }
     }
     
     public final void createPlayoffRound() {
@@ -108,22 +124,10 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             playoffSeeding.add(activeParticipants.get((playerCount - 1) - i));
         }
         
-        EventRound round = 
+        TournamentRound round = 
                 PairingFactory.generateMatches(playoffSeeding, 1, 2);
         
         this.rounds.add(round);
-    }
-    
-    public final void cutToTop(int x) {
-        ArrayList<E> toDrop = new ArrayList<>();
-        
-        for(int i=x; i < activeParticipants.size(); i++) {
-            toDrop.add(activeParticipants.get(i));
-        }
-        
-        for(E participant : toDrop) {
-            this.dropParticipant(participant);
-        }
     }
     
     private void dropEliminatedPlayers() {
@@ -141,18 +145,18 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         }
     }
     
-    public EventRound getRound(int index) {
+    public TournamentRound getRound(int index) {
         return rounds.get(index);
     }
     
     public final void deleteRound(int index) {
-        EventRound r = rounds.remove(index);
-        for(EventMatch match : r.getMatches()) {
+        TournamentRound r = rounds.remove(index);
+        for(TournamentMatch match : r.getMatches()) {
             match.cleanParticipants();
         }
     }
     
-    public final ArrayList<EventRound> getRounds() {
+    public final ArrayList<TournamentRound> getRounds() {
         return this.rounds;
     }
     

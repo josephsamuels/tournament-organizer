@@ -9,11 +9,11 @@ import java.util.ArrayList;
  * 
  * @author Joseph W. Samuels
  */
-public final class EventRound {
+public final class TournamentRound {
     /**
      * List used to contain the matches of this round.
      */
-    private final ArrayList<EventMatch> matches;
+    private final ArrayList<TournamentMatch> matches;
     
     /**
      * Constructs an object representing a round of an event using the list of
@@ -21,7 +21,7 @@ public final class EventRound {
      * 
      * @param   matches the matches that represent the pairings for the round
      */
-    public EventRound(ArrayList<EventMatch> matches) {
+    public TournamentRound(ArrayList<TournamentMatch> matches) {
         this.matches = matches;
     }
     
@@ -30,7 +30,7 @@ public final class EventRound {
      * 
      * @param   match   the match to add to the round
      */
-    public final void addMatch(EventMatch match) {
+    public final void addMatch(TournamentMatch match) {
         this.matches.add(match);
     }
     
@@ -42,7 +42,7 @@ public final class EventRound {
      * @param   match   the match to be removed from the round
      * @return          the list of players that were assigned to this match
      */
-    public final ArrayList<AbstractParticipant> deleteMatch(EventMatch match) {
+    public final ArrayList<AbstractParticipant> deleteMatch(TournamentMatch match) {
         return match.cleanParticipants();
     }
     
@@ -51,7 +51,7 @@ public final class EventRound {
      * 
      * @return          the list of matches for this round
      */
-    public final ArrayList<EventMatch> getMatches() {
+    public final ArrayList<TournamentMatch> getMatches() {
         return this.matches;
     }
 }

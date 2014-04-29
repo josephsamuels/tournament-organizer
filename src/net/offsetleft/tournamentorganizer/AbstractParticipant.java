@@ -13,7 +13,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     /**
      * List used to contain the matches the player participated in.
      */
-    protected final ArrayList<EventMatch> matches = new ArrayList<>();
+    protected final ArrayList<TournamentMatch> matches = new ArrayList<>();
     
     /**
      * Strings that contain the player's first and last names.
@@ -55,7 +55,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      * 
      * @return              the list of matches for this participant
      */
-    public final ArrayList<EventMatch> getMatches() {
+    public final ArrayList<TournamentMatch> getMatches() {
         return this.matches;
     }
     
@@ -64,7 +64,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      * 
      * @param match         the match to add to the list
      */
-    public final void addMatch(EventMatch match) {
+    public final void addMatch(TournamentMatch match) {
         this.matches.add(match);
     }
     
@@ -76,7 +76,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      * @return              a boolean representing the result of 
      *                      {@code ArrayList}'s remove action
      */
-    public final boolean removeMatch(EventMatch match) {
+    public final boolean removeMatch(TournamentMatch match) {
         return this.matches.remove(match);
     }
     
@@ -89,7 +89,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
     public final int getLossCount() {
         int lossCount = 0;
         
-        for(EventMatch match : matches) {
+        for(TournamentMatch match : matches) {
             if(match.getResult(this) != 0) {
                 lossCount++;
             }
@@ -105,7 +105,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      * @return              a boolean representing if {@code this} has had a bye
      */
     public final boolean hasHadBye() {
-        for(EventMatch match : this.matches) {
+        for(TournamentMatch match : this.matches) {
             if(match.getParticipants().size() == 1) {
                 return true;
             }
@@ -123,7 +123,7 @@ public abstract class AbstractParticipant implements Comparable<AbstractParticip
      *                      {@code player}
      */
     public final boolean hasPlayed(AbstractParticipant player) {
-        for(EventMatch match : this.matches) {
+        for(TournamentMatch match : this.matches) {
             if(match.wasParticipant(player)) {
                 return true;
             }

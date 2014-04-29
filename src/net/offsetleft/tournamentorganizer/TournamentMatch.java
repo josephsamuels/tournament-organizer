@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Joseph W. Samuels
  */
-public final class EventMatch {
+public final class TournamentMatch {
     /**
      * List used to contain the players participating in the match.
      */

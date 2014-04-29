@@ -7,7 +7,7 @@
 package net.offsetleft.test;
 
 import net.offsetleft.tournamentorganizer.AbstractParticipant;
-import net.offsetleft.tournamentorganizer.EventMatch;
+import net.offsetleft.tournamentorganizer.TournamentMatch;
 
 /**
  *
@@ -22,14 +22,14 @@ public class ConcreteParticipant extends AbstractParticipant {
     private int calcualtePoints() {
         int totalPoints = 0;
         
-        for(EventMatch m : matches) {
+        for(TournamentMatch m : matches) {
             totalPoints += roundPoints(m);
         }
         
         return totalPoints;
     }
     
-    private int roundPoints(EventMatch m) {
+    private int roundPoints(TournamentMatch m) {
         int playerCount = m.getParticipants().size();
         int placing = m.getResult(this);
         
