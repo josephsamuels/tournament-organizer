@@ -102,13 +102,11 @@ final class PairingFactory {
             }
             
             private void passToNext(AbstractParticipant p) {
-                if (this.hasNext()) {
-                    next.addPlayer(p);
-                } else {
+                if (!this.hasNext()) {
                     next = new PairingNode(this, minNodeSize, maxNodeSize);
-
-                    next.addPlayer(p);
                 }
+                
+                next.addPlayer(p);
             }
             
             private boolean hasNext() {

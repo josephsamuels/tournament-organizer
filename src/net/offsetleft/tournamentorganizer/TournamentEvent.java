@@ -9,37 +9,29 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     private final ArrayList<E> activeParticipants = new ArrayList<>();
     private final ArrayList<E> droppedParticipants = new ArrayList<>();
     
+    private final ArrayList<TournamentStage> stages = new ArrayList<>();
     private final ArrayList<TournamentRound> rounds = new ArrayList<>();
     
     private final int MIN_PAIRING, MAX_PAIRING;
     
-    private final TournamentStyle STYLE;
-    private final TournamentFormat FORMAT;
+    private final TournamentStageStyle STYLE;
+    private final TournamentStageFormat FORMAT;
     
-    public TournamentEvent(TournamentStyle style) {
-        this(1, 2, TournamentFormat.HEADSUP, style);
+    public TournamentEvent(TournamentStageStyle style) {
+        this(1, 2, TournamentStageFormat.HEADSUP, style);
     }
     
     public TournamentEvent(
             int minPairingCount, 
             int maxPairingCount, 
-            TournamentFormat format,
-            TournamentStyle style) {
+            TournamentStageFormat format,
+            TournamentStageStyle style) {
         this.MIN_PAIRING = minPairingCount;
         this.MAX_PAIRING = maxPairingCount;
         this.FORMAT = format;
         this.STYLE = style;
     }
-    
-    /*
-     *  The following methods deal in participant relations.
-     */
-    
-    /**
-     * 
-     * 
-     * @param participant 
-     */
+
     public final void addParticipant(E participant) {
         if(!this.allParticipants.contains(participant)) {
             this.allParticipants.add(participant);
@@ -81,7 +73,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     }
     
     public final void createRound() {
-        if(STYLE == TournamentStyle.SINGLE || STYLE == TournamentStyle.DOUBLE) {
+        if(STYLE == TournamentStageStyle.SINGLE || STYLE == TournamentStageStyle.DOUBLE) {
             dropEliminatedPlayers();
         }
         
@@ -89,9 +81,9 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         
         PairingFactory.RematchesAllowed rematches = null;
         
-        if(FORMAT == TournamentFormat.HEADSUP) {
+        if(FORMAT == TournamentStageFormat.HEADSUP) {
             rematches = PairingFactory.RematchesAllowed.NO;
-        } else if(FORMAT == TournamentFormat.MULTIPLAYER) {
+        } else if(FORMAT == TournamentStageFormat.MULTIPLAYER) {
             rematches = PairingFactory.RematchesAllowed.YES;
         }
         
@@ -134,8 +126,8 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         ArrayList<E> toDrop = new ArrayList<>();
         
         for(E participant : activeParticipants) {
-            if((participant.getLossCount() > 0 && STYLE == TournamentStyle.SINGLE)
-                  || (participant.getLossCount() > 1 && STYLE == TournamentStyle.DOUBLE)) {
+            if((participant.getLossCount() > 0 && STYLE == TournamentStageStyle.SINGLE)
+                  || (participant.getLossCount() > 1 && STYLE == TournamentStageStyle.DOUBLE)) {
                 toDrop.add(participant);
             }
         }
@@ -160,7 +152,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         return this.rounds;
     }
     
-    public final TournamentStyle getEventStyle() {
+    public final TournamentStageStyle getEventStyle() {
         return this.STYLE;
     }
 }

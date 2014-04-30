@@ -5,7 +5,7 @@ import net.offsetleft.tournamentorganizer.AbstractParticipant;
 import net.offsetleft.tournamentorganizer.TournamentMatch;
 import net.offsetleft.tournamentorganizer.TournamentRound;
 import net.offsetleft.tournamentorganizer.TournamentEvent;
-import net.offsetleft.tournamentorganizer.TournamentStyle;
+import net.offsetleft.tournamentorganizer.TournamentStageStyle;
 
 /**
  *
@@ -26,7 +26,7 @@ public class PairingFactoryTest {
         ConcreteParticipant p7 = new ConcreteParticipant("Callan", "John");
         ConcreteParticipant p8 = new ConcreteParticipant("Samuels", "Joe");
         
-        TournamentEvent te = new TournamentEvent(TournamentStyle.SWISS);
+        TournamentEvent te = new TournamentEvent(TournamentStageStyle.SWISS);
         
         te.addParticipant(p1);
         te.addParticipant(p2);

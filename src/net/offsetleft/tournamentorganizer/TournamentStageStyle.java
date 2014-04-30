@@ -1,5 +1,5 @@
 package net.offsetleft.tournamentorganizer;
 
-public enum TournamentStyle {
+public enum TournamentStageStyle {
     SWISS, SINGLE, DOUBLE;
 }
