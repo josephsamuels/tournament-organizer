@@ -42,7 +42,8 @@ public final class TournamentRound {
      * @param   match   the match to be removed from the round
      * @return          the list of players that were assigned to this match
      */
-    public final ArrayList<AbstractParticipant> deleteMatch(TournamentMatch match) {
+    public final ArrayList<AbstractParticipant> deleteMatch(
+            TournamentMatch match) {
         return match.cleanParticipants();
     }
     
