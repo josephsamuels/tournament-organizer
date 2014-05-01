@@ -100,6 +100,16 @@ public abstract class AbstractParticipant implements
     }
     
     /**
+     * Returns the number of matches P@code this} has participated in.
+     * 
+     * @return              an int representing the number of rounds the
+     *                      participant was involved in.
+     */
+    public final int roundsPlayed() {
+        return matches.size();
+    }
+    
+    /**
      * Returns if {@code this} participant has had a bye or not. A bye is 
      * considered to be any match where {@code this} was the only participant.
      * 
