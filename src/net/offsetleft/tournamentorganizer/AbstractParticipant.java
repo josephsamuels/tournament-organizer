@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * 
  * @author Joseph W. Samuels
  */
-public abstract class AbstractParticipant implements Comparable<AbstractParticipant> {
+public abstract class AbstractParticipant implements 
+        Comparable<AbstractParticipant> {
     /**
      * List used to contain the matches the player participated in.
      */
