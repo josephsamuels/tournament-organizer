@@ -14,7 +14,8 @@ final class PairingFactory {
             int minPlayers, 
             int maxPlayers) {
         
-        return generateMatches(players, minPlayers, maxPlayers, RematchesAllowed.YES);
+        return generateMatches(
+                players, minPlayers, maxPlayers, RematchesAllowed.YES);
     }
     
     static <E extends AbstractParticipant> TournamentRound generateMatches(
@@ -85,7 +86,8 @@ final class PairingFactory {
             }
 
             private void addPlayer(AbstractParticipant p) {
-                if (getSize() < maxNodeSize && rematches == RematchesAllowed.NO) {
+                if (getSize() < maxNodeSize 
+                        && rematches == RematchesAllowed.NO) {
                     for (AbstractParticipant opponent : players) {
                         if (p.hasPlayed(opponent)) {
                             passToNext(p);
@@ -146,7 +148,9 @@ final class PairingFactory {
                     players.add(previous.surrenderLast());
                 }
                 
-                if(getSize() == 1 && players.get(0).hasHadBye() && previous != null) {
+                if(getSize() == 1 
+                        && players.get(0).hasHadBye() 
+                        && previous != null) {
                     boolean matchFound = false;
                     AbstractParticipant toPair = players.get(0);
                     AbstractParticipant potentialOp;
@@ -154,10 +158,15 @@ final class PairingFactory {
 
                     while(!matchFound && currentNodeToCheck != null) {
                         for(int i = 0; i < currentNodeToCheck.getSize(); i++) {
-                            potentialOp = currentNodeToCheck.getMatch().getParticipants().get(i);
+                            potentialOp = 
+                                    currentNodeToCheck
+                                            .getMatch()
+                                            .getParticipants().get(i);
 
                             if(!potentialOp.hasPlayed(toPair)) {
-                                players.add(currentNodeToCheck.surrenderPlayer(potentialOp));
+                                players.add(
+                                        currentNodeToCheck
+                                                .surrenderPlayer(potentialOp));
                                 matchFound = true;
                                 break;
                             }
