@@ -4,130 +4,73 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public final class TournamentEvent<E extends AbstractParticipant> {
-    
     private final ArrayList<E> allParticipants = new ArrayList<>();
     private final ArrayList<E> activeParticipants = new ArrayList<>();
-    private final ArrayList<E> droppedParticipants = new ArrayList<>();
+    private final ArrayList<E> droppedPartcipants = new ArrayList<>();
     
-    private final ArrayList<TournamentStage> stages = new ArrayList<>();
-    private final ArrayList<TournamentRound> rounds = new ArrayList<>();
+    private final ArrayList<TournamentRound> eventRounds = new ArrayList<>();
     
-    private final int MIN_PAIRING, MAX_PAIRING;
     
-    private final TournamentStageStyle STYLE;
-    private final TournamentStageFormat FORMAT;
     
-    public TournamentEvent(TournamentStageStyle style) {
-        this(1, 2, TournamentStageFormat.HEADSUP, style);
-    }
     
-    public TournamentEvent(
-            int minPairingCount, 
-            int maxPairingCount, 
-            TournamentStageFormat format,
-            TournamentStageStyle style) {
-        this.MIN_PAIRING = minPairingCount;
-        this.MAX_PAIRING = maxPairingCount;
-        this.FORMAT = format;
-        this.STYLE = style;
-    }
-
     public final void addParticipant(E participant) {
-        if(!this.allParticipants.contains(participant)) {
-            this.allParticipants.add(participant);
-            this.activeParticipants.add(participant);
-        }
+        this.allParticipants.add(participant);
+        this.activeParticipants.add(participant);
     }
     
-    public final void removeParticipant(E player) throws Exception {
-        if(rounds.isEmpty()) {
-            this.activeParticipants.remove(player);
-            this.allParticipants.remove(player);
-            this.droppedParticipants.remove(player);
-        } else {
+    public final void removeParticipant(E participant) {
+        if(eventRounds.size() > 0) {
             throw new IllegalStateException(
-                    "Cannot remove player after event has started.");
+                    "You cannot delete a particpant after the event has started.");
+        } else {
+            this.allParticipants.remove(participant);
+            this.activeParticipants.remove(participant);
+            this.droppedPartcipants.remove(participant);
         }
     }
     
     public final void dropParticipant(E participant) {
-        this.activeParticipants.remove(participant);
-        this.droppedParticipants.add(participant);
+        if(activeParticipants.contains(participant) 
+                && !droppedPartcipants.contains(participant)) {
+            this.activeParticipants.remove(participant);
+            this.droppedPartcipants.add(participant);
+        }
     }
     
-    public final void reinstateParticipant(E particpant) {
-        this.droppedParticipants.remove(particpant);
-        this.activeParticipants.add(particpant);
+    public final void reinstateParticipant(E participant) {
+        if(!activeParticipants.contains(participant) 
+                && droppedPartcipants.contains(participant)) {
+            this.activeParticipants.add(participant);
+            this.droppedPartcipants.remove(participant);
+        }
     }
     
-    public final ArrayList<E> getAllParticipantsList() {
+    
+    
+    
+    public final ArrayList<E> getAllParticipants() {
         return this.allParticipants;
     }
     
-    public final ArrayList<E> getActiveParticipantList() {
+    public final ArrayList<E> getActiveParticipants() {
         return this.activeParticipants;
     }
     
-    public final ArrayList<E> getDroppedParticipantList() {
-        return this.droppedParticipants;
+    public final ArrayList<E> getDroppedParticipants() {
+        return this.droppedPartcipants;
     }
     
-    public final void createRound() {
-        if(STYLE == TournamentStageStyle.SINGLE || STYLE == TournamentStageStyle.DOUBLE) {
-            dropEliminatedPlayers();
-        }
-        
-        Collections.sort(activeParticipants);
-        
-        PairingFactory.RematchesAllowed rematches = null;
-        
-        if(FORMAT == TournamentStageFormat.HEADSUP) {
-            rematches = PairingFactory.RematchesAllowed.NO;
-        } else if(FORMAT == TournamentStageFormat.MULTIPLAYER) {
-            rematches = PairingFactory.RematchesAllowed.YES;
-        }
-        
-        TournamentRound round = 
-                    PairingFactory.generateMatches(activeParticipants, 
-                                                    MIN_PAIRING, 
-                                                    MAX_PAIRING, rematches);
-        
-        this.rounds.add(round);
-    }
     
-    public final void createPlayoff(int theCut) {
-        Collections.sort(activeParticipants);
-        
-        ArrayList<E> toPlayoff = new ArrayList<>();
-        
-        for(int i=0; i < theCut; i++) {
-            toPlayoff.add(activeParticipants.get(i));
-        }
-    }
     
-    public final void createPlayoffRound() {
-        Collections.sort(activeParticipants);
-        
-        ArrayList<E> playoffSeeding = new ArrayList<>();
-        int playerCount = activeParticipants.size();
-        
-        for(int i = 0; i < playerCount / 2; i++) {
-            playoffSeeding.add(activeParticipants.get(i));
-            playoffSeeding.add(activeParticipants.get((playerCount - 1) - i));
-        }
-        
-        TournamentRound round = 
-                PairingFactory.generateMatches(playoffSeeding, 1, 2);
-        
-        this.rounds.add(round);
-    }
     
-    private void dropEliminatedPlayers() {
+    private void dropEliminatedPlayers(TournamentEliminationStyle style) {
         ArrayList<E> toDrop = new ArrayList<>();
         
         for(E participant : activeParticipants) {
-            if((participant.getLossCount() > 0 && STYLE == TournamentStageStyle.SINGLE)
-                  || (participant.getLossCount() > 1 && STYLE == TournamentStageStyle.DOUBLE)) {
+            if((participant.getLossCount() > 0 
+                    && style == TournamentEliminationStyle.SINGLE)
+                  || (participant.getLossCount() > 1 
+                    && style == TournamentEliminationStyle.DOUBLE)) {
                 toDrop.add(participant);
             }
         }
@@ -137,22 +80,36 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         }
     }
     
-    public TournamentRound getRound(int index) {
-        return rounds.get(index);
-    }
     
-    public final void deleteRound(int index) {
-        TournamentRound r = rounds.remove(index);
-        for(TournamentMatch match : r.getMatches()) {
-            match.cleanParticipants();
+    
+    
+    public final void createNewTournamentRound(
+            TournamentPairingSystem system,
+            TournamentEliminationStyle style,
+            int minPlayers,
+            int maxPlayers) {
+        
+        if(style == TournamentEliminationStyle.SINGLE || style == TournamentEliminationStyle.DOUBLE) {
+            dropEliminatedPlayers(style);
         }
+        
+        Collections.sort(activeParticipants);
+        
+        TournamentRound round = 
+                PairingFactory.generateMatches(
+                        allParticipants, 
+                        minPlayers, 
+                        maxPlayers, 
+                        system);
+        
+        this.eventRounds.add(round);
     }
     
-    public final ArrayList<TournamentRound> getRounds() {
-        return this.rounds;
+    public ArrayList<TournamentMatch> getRoundMatches(int roundIndex) {
+        return eventRounds.get(roundIndex).getMatches();
     }
     
-    public final TournamentStageStyle getEventStyle() {
-        return this.STYLE;
+    public void deleteRound(int roundIndex) {
+        eventRounds.remove(roundIndex).cleanupRound();
     }
 }
