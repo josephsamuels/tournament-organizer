@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 /**
  * Abstract composite class that contains three properties. Includes a number 
- * of standard methods that help to manage a participant in an event. Must 
- * implement the compareTo method in order for this package to work properly.
+ * of standard methods that help to manage a participant in an event.
  * 
  * @author Joseph W. Samuels
  */
-public abstract class AbstractParticipant implements 
-        Comparable<AbstractParticipant> {
+public abstract class AbstractParticipant {
     /**
      * List used to contain the matches the player participated in.
      */
@@ -151,6 +149,6 @@ public abstract class AbstractParticipant implements
      */
     @Override
     public String toString() {
-        return surname + ", " + givenName;
+        return "[ " + surname + ", " + givenName + " ]";
     }
 }
