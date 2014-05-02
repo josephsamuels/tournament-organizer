@@ -13,7 +13,7 @@ final class TournamentRound {
     /**
      * List used to contain the matches of this round.
      */
-    private final ArrayList<TournamentMatch> matches;
+    private final ArrayList<TournamentMatch> roundMatches;
     
     /**
      * Constructs an object representing a round of an event using the list of
@@ -22,7 +22,7 @@ final class TournamentRound {
      * @param   matches the matches that represent the pairings for the round
      */
     TournamentRound(ArrayList<TournamentMatch> matches) {
-        this.matches = matches;
+        this.roundMatches = matches;
     }
     
     /**
@@ -31,7 +31,7 @@ final class TournamentRound {
      * @param   match   the match to add to the round
      */
     final void addMatch(TournamentMatch match) {
-        this.matches.add(match);
+        this.roundMatches.add(match);
     }
     
     /**
@@ -53,6 +53,16 @@ final class TournamentRound {
      * @return          the list of matches for this round
      */
     final ArrayList<TournamentMatch> getMatches() {
-        return this.matches;
+        return this.roundMatches;
+    }
+    
+    /**
+     * Cleans up participants in the round. Should be called prior to deleting
+     * the round.
+     */
+    final void cleanupRound() {
+        for(TournamentMatch m : roundMatches) {
+            m.cleanParticipants();
+        }
     }
 }
