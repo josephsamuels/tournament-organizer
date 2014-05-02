@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * 
  * @author Joseph W. Samuels
  */
-public final class TournamentRound {
+final class TournamentRound {
     /**
      * List used to contain the matches of this round.
      */
@@ -21,7 +21,7 @@ public final class TournamentRound {
      * 
      * @param   matches the matches that represent the pairings for the round
      */
-    public TournamentRound(ArrayList<TournamentMatch> matches) {
+    TournamentRound(ArrayList<TournamentMatch> matches) {
         this.matches = matches;
     }
     
@@ -30,7 +30,7 @@ public final class TournamentRound {
      * 
      * @param   match   the match to add to the round
      */
-    public final void addMatch(TournamentMatch match) {
+    final void addMatch(TournamentMatch match) {
         this.matches.add(match);
     }
     
@@ -42,7 +42,7 @@ public final class TournamentRound {
      * @param   match   the match to be removed from the round
      * @return          the list of players that were assigned to this match
      */
-    public final ArrayList<AbstractParticipant> deleteMatch(
+    final ArrayList<AbstractParticipant> deleteMatch(
             TournamentMatch match) {
         return match.cleanParticipants();
     }
@@ -52,7 +52,7 @@ public final class TournamentRound {
      * 
      * @return          the list of matches for this round
      */
-    public final ArrayList<TournamentMatch> getMatches() {
+    final ArrayList<TournamentMatch> getMatches() {
         return this.matches;
     }
 }
