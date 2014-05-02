@@ -1,7 +1,6 @@
 package net.offsetleft.tournamentorganizer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public final class TournamentEvent<E extends AbstractParticipant> {
     private final ArrayList<E> allParticipants = new ArrayList<>();
@@ -10,7 +9,9 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     
     private final ArrayList<TournamentRound> eventRounds = new ArrayList<>();
     
-    
+    /*
+    *   Participant relations
+    */
     
     
     public final void addParticipant(E participant) {
@@ -44,10 +45,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
             this.droppedPartcipants.remove(participant);
         }
     }
-    
-    
-    
-    
+
     public final ArrayList<E> getAllParticipants() {
         return this.allParticipants;
     }
@@ -59,10 +57,7 @@ public final class TournamentEvent<E extends AbstractParticipant> {
     public final ArrayList<E> getDroppedParticipants() {
         return this.droppedPartcipants;
     }
-    
-    
-    
-    
+
     private void dropEliminatedPlayers(TournamentEliminationStyle style) {
         ArrayList<E> toDrop = new ArrayList<>();
         
@@ -80,7 +75,9 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         }
     }
     
-    
+    /*
+    *   Round Relations
+    */
     
     
     public final void createNewTournamentRound(
@@ -92,8 +89,6 @@ public final class TournamentEvent<E extends AbstractParticipant> {
         if(style == TournamentEliminationStyle.SINGLE || style == TournamentEliminationStyle.DOUBLE) {
             dropEliminatedPlayers(style);
         }
-        
-        Collections.sort(activeParticipants);
         
         TournamentRound round = 
                 PairingFactory.generateMatches(
