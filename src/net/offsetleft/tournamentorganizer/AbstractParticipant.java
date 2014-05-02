@@ -144,27 +144,6 @@ public abstract class AbstractParticipant implements
     }
     
     /**
-     * Useful for sorting participants alphabetically. First sorts by
-     * {@code surname}, then by {@code givenName}.
-     * 
-     * @param p             the participant we wish to compare against
-     * @return              the value 0 if {@code this} is equal to the provided
-     *                      string; a value less than 0 if {@code this} is less
-     *                      than the provided argument; a value greater than 0
-     *                      if {@code this} is greater than the provided 
-     *                      argument.
-     */
-    public int alphaCompare(AbstractParticipant p) {
-        if(surname.compareTo(p.surname) != 0) {
-            return surname.compareTo(p.surname);
-        } else if(givenName.compareTo(p.givenName) != 0) {
-            return givenName.compareTo(p.givenName);
-        }
-
-        return 0;
-    }
-    
-    /**
      * Returns a String object in last name first, first name last format.
      * 
      * @return              a string representation of this object in last name
