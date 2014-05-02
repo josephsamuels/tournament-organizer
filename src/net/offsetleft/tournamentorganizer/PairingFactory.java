@@ -3,9 +3,6 @@ package net.offsetleft.tournamentorganizer;
 import java.util.ArrayList;
 
 final class PairingFactory {
-    enum RematchesAllowed {
-        YES, NO;
-    }
     
     private PairingFactory() { }
     
@@ -15,32 +12,32 @@ final class PairingFactory {
             int maxPlayers) {
         
         return generateMatches(
-                players, minPlayers, maxPlayers, RematchesAllowed.YES);
+                players, minPlayers, maxPlayers, TournamentPairingSystem.DANISH);
     }
     
     static <E extends AbstractParticipant> TournamentRound generateMatches(
             ArrayList<E> players, 
             int minPlayers, 
             int maxPlayers, 
-            RematchesAllowed rematches) {
+            TournamentPairingSystem system) {
         
         PairingList<E> list = 
-                new PairingList(players, minPlayers, maxPlayers, rematches);
+                new PairingList(players, minPlayers, maxPlayers, system);
         
         return list.getPairings();
     }
     
     private static class PairingList <E extends AbstractParticipant> {
         private final PairingNode root;
-        private final RematchesAllowed rematches;
+        private final TournamentPairingSystem system;
         
         private PairingList(
                 ArrayList<AbstractParticipant> players, 
                 int minNodeSize, 
                 int maxNodeSize, 
-                RematchesAllowed rematches) {
+                TournamentPairingSystem system) {
             
-            this.rematches = rematches;
+            this.system = system;
             root = new PairingNode(null, minNodeSize, maxNodeSize);
 
             for(AbstractParticipant p : players) {
@@ -87,7 +84,7 @@ final class PairingFactory {
 
             private void addPlayer(AbstractParticipant p) {
                 if (getSize() < maxNodeSize 
-                        && rematches == RematchesAllowed.NO) {
+                        && system == TournamentPairingSystem.SWISS) {
                     for (AbstractParticipant opponent : players) {
                         if (p.hasPlayed(opponent)) {
                             passToNext(p);
