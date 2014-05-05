@@ -21,7 +21,7 @@ public class ConcreteParticipant extends AbstractParticipant {
     
     private int roundPoints(TournamentMatch m) {
         int playerCount = m.getParticipants().size();
-        int placing = m.getResult(this);
+        int placing = m.getPlayersResult(this);
         
         if(playerCount <= 2) {
             switch(placing) {
