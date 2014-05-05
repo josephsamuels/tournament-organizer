@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * 
  * @author Joseph W. Samuels
  */
-final class TournamentRound {
+public final class TournamentRound {
     /**
      * List used to contain the matches of this round.
      */
@@ -44,7 +44,7 @@ final class TournamentRound {
      */
     final ArrayList<AbstractParticipant> deleteMatch(
             TournamentMatch match) {
-        return match.cleanParticipants();
+        return match.cleanupMatch();
     }
     
     /**
@@ -61,8 +61,47 @@ final class TournamentRound {
      * the round.
      */
     final void cleanupRound() {
-        for(TournamentMatch m : roundMatches) {
-            m.cleanParticipants();
+        for(TournamentMatch m : this.roundMatches) {
+            m.cleanupMatch();
         }
+    }
+    
+    /**
+     * Checks to see if this round contains a specific TournamentMatch object.
+     * 
+     * @param match     the TournamentMatch to check for.
+     * @return          boolean value representing if the match was found.
+     */
+    final boolean containsMatch(TournamentMatch match) {
+        return this.roundMatches.contains(match);
+    }
+
+    /**
+     * Gets the index value for a specific TournamentMatch object.
+     * 
+     * @param match     the Tournament match to check for.
+     * @return          an int value representing the TournamentMatch's index.
+     */
+    final int getMatchIndex(TournamentMatch match) {
+        return this.roundMatches.indexOf(match);
+    }
+    
+    /**
+     * Returns a specific TournamentMatch based on the provided index value.
+     * 
+     * @param matchIndex    the index value to return.
+     * @return              the TournamentMatch object at the provided index.
+     */
+    public final TournamentMatch match(int matchIndex) {
+        return this.roundMatches.get(matchIndex);
+    }
+    
+    final boolean roundHasResults() {
+        for(TournamentMatch e : this.roundMatches) {
+            if(e.matchHasResults())
+                return true;
+        }
+        
+        return false;
     }
 }

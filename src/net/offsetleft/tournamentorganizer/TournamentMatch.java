@@ -14,13 +14,13 @@ public final class TournamentMatch {
     /**
      * List used to contain the players participating in the match.
      */
-    private final ArrayList<AbstractParticipant> participants = 
+    private final ArrayList<AbstractParticipant> matchParticipants = 
             new ArrayList<>();
     
     /**
      * List used to contain the results of the match.
      */
-    private final ArrayList<AbstractParticipant> results = new ArrayList<>();
+    private ArrayList<AbstractParticipant> matchResults;
     
     /**
      * Adds a participant to this match. Additionally add {@code this} match
@@ -29,7 +29,7 @@ public final class TournamentMatch {
      * @param p         the participant to add to this match.
      */
     public final void addParticipant(AbstractParticipant p) {
-        participants.add(p);
+        matchParticipants.add(p);
         p.addMatch(this);
     }
     
@@ -39,7 +39,7 @@ public final class TournamentMatch {
      * @return          the list of participants involved in this match.
      */
     public final ArrayList<AbstractParticipant> getParticipants() {
-        return this.participants;
+        return this.matchParticipants;
     }
     
     /**
@@ -51,7 +51,7 @@ public final class TournamentMatch {
      *                  not participate in this match.
      */
     public final boolean wasParticipant(AbstractParticipant p) {
-        return this.participants.contains(p);
+        return this.matchParticipants.contains(p);
     }
     
     /**
@@ -61,23 +61,21 @@ public final class TournamentMatch {
      * 
      * @param results   the list of participants in finishing order.
      */
-    public final void setResults(ArrayList<AbstractParticipant> results) {
-        for(AbstractParticipant particpant : results) {
-            this.results.add(particpant);
-        }
+    final void setResults(ArrayList<AbstractParticipant> results) {
+        this.matchResults = results;
     }
     
     /**
      * Gets the results of the provided player if they were a participant in
      * {@code this} match.
      * 
-     * @param player
-     * @return 
+     * @param player    the player to check.
+     * @return          the player's finishing position.
      */
-    public final int getResult(AbstractParticipant player) {
-        if(results.size() > 0)
-            if(results.contains(player))
-                return results.indexOf(player);
+    public final int getPlayersResult(AbstractParticipant player) {
+        if(matchResults.size() > 0)
+            if(matchResults.contains(player))
+                return matchResults.indexOf(player);
             else
                 throw new NoSuchElementException(
                         "Player did not participate in this match");
@@ -88,7 +86,7 @@ public final class TournamentMatch {
      * Clears the results of this match.
      */
     public final void clearResults() {
-        this.results.clear();
+        this.matchResults = null;
     }
     
     /**
@@ -97,11 +95,15 @@ public final class TournamentMatch {
      * 
      * @return          an ArrayList of the former participants of this match.
      */
-    public final ArrayList<AbstractParticipant> cleanParticipants() {
-        for(AbstractParticipant participant : this.participants) {
+    final ArrayList<AbstractParticipant> cleanupMatch() {
+        for(AbstractParticipant participant : this.matchParticipants) {
             participant.removeMatch(this);
         }
         
-        return participants;
+        return matchParticipants;
+    }
+    
+    final boolean matchHasResults() {
+        return !(this.matchResults == null);
     }
 }

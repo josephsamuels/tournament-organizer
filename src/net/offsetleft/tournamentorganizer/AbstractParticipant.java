@@ -89,7 +89,7 @@ public abstract class AbstractParticipant {
         int lossCount = 0;
         
         for(TournamentMatch match : matches) {
-            if(match.getResult(this) != 0) {
+            if(match.getPlayersResult(this) != 0) {
                 lossCount++;
             }
         }
