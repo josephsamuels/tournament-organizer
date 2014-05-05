@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package net.offsetleft.test.roundtester;
 
 import java.util.ArrayList;
@@ -15,10 +9,6 @@ import net.offsetleft.tournamentorganizer.TournamentEvent;
 import net.offsetleft.tournamentorganizer.TournamentMatch;
 import net.offsetleft.tournamentorganizer.TournamentPairingSystem;
 
-/**
- *
- * @author josephsamuels
- */
 public class RoundTester {
     public static void main(String args[]) {
         TournamentEvent te = new TournamentEvent();
