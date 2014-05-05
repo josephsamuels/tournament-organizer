@@ -1,25 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package net.offsetleft.test;
 
 import net.offsetleft.tournamentorganizer.AbstractParticipant;
 import net.offsetleft.tournamentorganizer.TournamentMatch;
 
-/**
- *
- * @author josephsamuels
- */
 public class ConcreteParticipant extends AbstractParticipant {
     
     public ConcreteParticipant(String surname, String givenName) {
         super(surname, givenName);
     }
     
-    private int calcualtePoints() {
+    public int getPoints() {
         int totalPoints = 0;
         
         for(TournamentMatch m : matches) {
@@ -57,24 +47,7 @@ public class ConcreteParticipant extends AbstractParticipant {
     }
     
     @Override
-    public int compareTo(AbstractParticipant o) {
-        if(o instanceof ConcreteParticipant) {
-            ConcreteParticipant op = (ConcreteParticipant)o;
-            
-            if(this.calcualtePoints() < op.calcualtePoints()) {
-                return 1;
-            } else if(this.calcualtePoints() > op.calcualtePoints()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-        
-        return alphaCompare(o);
-    }
-    
-    @Override
     public String toString() {
-        return super.toString() + "(" + this.calcualtePoints() + ")";
+        return super.toString() + " (" + this.getPoints() + ")";
     }
 }
