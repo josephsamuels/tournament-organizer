@@ -57,6 +57,7 @@ public class RoundTester {
         
         System.out.println();
         System.out.println("Deleting Round 1");
+        
         te.deleteRound(0);
         System.out.println(te.getActiveParticipants());
     }
